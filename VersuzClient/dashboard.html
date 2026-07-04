@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versuz | The Arena</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #14141a; border-bottom: 1px solid #252530;">
+        <h2 style="color: var(--neon-green); margin: 0;">VERSUZ ARENA</h2>
+        <button id="logoutBtn" style="background: transparent; color: var(--neon-pink); border: 1px solid var(--neon-pink); padding: 8px 16px; cursor: pointer; font-family: 'Orbitron';">Leave Arena</button>
+    </header>
+
+    <div class="arena-grid">
+        
+        <div>
+            <h3 style="color: var(--neon-green); margin-bottom: 20px;">🛡️ Your Squad Control</h3>
+            
+            <div id="createTeamBox" class="arena-card">
+                <h4>Form a New Alliance</h4>
+                <form id="createTeamForm">
+                    <div class="form-group">
+                        <label>Team Name</label>
+                        <input type="text" id="teamName" placeholder="e.g., Padel Masters" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sport Discipline</label>
+                        <select id="sportSelect" required>
+                            <option value="1">Cricket</option>
+                            <option value="2">Football</option>
+                            <option value="3">Basketball</option>
+                            <option value="4">Padel</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-neon">Register Club</button>
+                </form>
+            </div>
+
+            <div id="activeTeamBox" class="arena-card hidden" style="border-left: 4px solid var(--neon-green);">
+                <h4 id="displayTeamName" style="margin-top: 0; font-size: 1.6rem; color: #fff;">SQUAD_NAME</h4>
+                <p style="color: var(--text-muted); font-size: 1rem; margin-top: -10px;">Sport: <span id="displaySport" style="color: #fff;">-</span></p>
+                
+                <div style="display: flex; gap: 20px; margin: 20px 0; background: #0f0f12; padding: 15px; border-radius: 4px;">
+                    <div>⚙️ status: <span id="poolStatusText" style="font-weight: bold; color: var(--neon-pink);">INACTIVE</span></div>
+                </div>
+
+                <button id="togglePoolBtn" class="btn-neon" style="background: var(--neon-pink); color: white;">Activate Matchmaking Search</button>
+            </div>
+        </div>
+
+        <div>
+            <h3 style="color: var(--neon-pink); margin-bottom: 20px;">⚔️ Live Matchmaking Feed</h3>
+            <div id="queueContainer" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="arena-card" style="text-align: center; color: var(--text-muted);">
+                    Scanning local sports coordinates for active queues...
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

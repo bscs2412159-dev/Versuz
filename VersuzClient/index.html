@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versuz | Entry Gate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1 style="text-align: center; color: var(--neon-green); margin-bottom: 5px;">VERSUZ</h1>
+        <p id="authSubtitle" style="text-align: center; color: var(--text-muted); margin-top: 0; margin-bottom: 30px;">Claim Your Roster Spot</p>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="regName" placeholder="e.g., Rafa Nadal" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="regEmail" placeholder="rafa@versuz.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-neon">Initialize Profile</button>
+            <p style="text-align: center; font-size: 1rem; color: var(--text-muted); margin-top: 20px;">
+                Already verified? <a href="#" style="color: var(--neon-green);" id="switchToLogin">Log In Here</a>
+            </p>
+        </form>
+
+        <form id="loginForm" class="hidden">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="loginEmail" placeholder="rafa@versuz.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-neon">Enter Arena</button>
+            <p style="text-align: center; font-size: 1rem; color: var(--text-muted); margin-top: 20px;">
+                New recruit? <a href="#" style="color: var(--neon-green);" id="switchToRegister">Create Account</a>
+            </p>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Rajdhani:wght@500;700&display=swap');
+
+:root {
+    --bg-dark: #0f0f12;
+    --card-bg: #181820;
+    --neon-green: #39ff14;
+    --neon-pink: #ff007f;
+    --text-main: #ffffff;
+    --text-muted: #8e8e9f;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.2rem;
+}
+
+h1, h2, h3, .vs-title {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 4px;
+    border-left: 5px solid var(--neon-green);
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: #0b0b0d;
+    border: 1px solid #2d2d38;
+    color: #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+input:focus {
+    border-color: var(--neon-green);
+    outline: none;
+    box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+.btn-neon {
+    width: 100%;
+    padding: 14px;
+    background: var(--neon-green);
+    color: #000;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+    background: #2ee610;
+    box-shadow: 0 0 15px var(--neon-green);
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none !important;
+}
