@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versuz — Set Up Your Profile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div style="position:relative;z-index:1;">
+      <div class="brand" style="margin-bottom:8px;">
+        <span class="split"></span> VERSUZ
+      </div>
+      <p class="eyebrow" style="margin-top:4px;">SPORTS MATCHMAKING</p>
+    </div>
+    <div style="position:relative;z-index:1;">
+      <h2 style="margin-bottom:14px;">Almost there.</h2>
+      <p style="max-width:360px;">Tell us how you play so we can personalize your dashboard.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-col">
+    <div class="auth-box">
+      <button class="modal-close" onclick="skipOnboarding()" aria-label="Close" style="position:absolute;top:20px;right:20px;">✕</button>
+      <h1>Set up your profile</h1>
+      <p class="sub">Tell us how you play so we can personalize your dashboard.</p>
+
+      <div class="alert" id="onboardingAlert"></div>
+
+      <form id="onboardingForm">
+        <div class="field">
+          <label>I am a...</label>
+          <div class="flex gap-12" style="margin-top:6px;">
+            <label class="flex gap-8" style="align-items:center;font-size:.85rem;">
+              <input type="radio" name="role" value="Member" checked> Member
+            </label>
+            <label class="flex gap-8" style="align-items:center;font-size:.85rem;">
+              <input type="radio" name="role" value="Captain"> Captain
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Sports I play</label>
+          <div id="sportsCheckboxList" class="flex gap-12" style="flex-wrap:wrap;margin-top:6px;">
+            <span style="font-size:.8rem;color:var(--text-mute);">Loading sports...</span>
+          </div>
+        </div>
+
+        <div id="teamFieldsBlock" style="display:none;">
+          <div class="field">
+            <label for="teamName">Team name</label>
+            <input type="text" id="teamName" name="teamName" placeholder="Iron Falcons">
+          </div>
+          <div class="field">
+            <label for="teamSport">Team sport</label>
+            <select id="teamSport" name="teamSport">
+              <option value="">Select a sport</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Add teammates (optional)</label>
+            <div id="memberEmailsList" style="margin-top:6px;">
+              <div class="field" style="margin-bottom:8px;">
+                <input type="email" name="memberEmail" placeholder="teammate@club.com" style="margin-bottom:0;">
+              </div>
+            </div>
+            <button type="button" class="link-accent" style="font-size:.8rem;background:none;border:none;cursor:pointer;padding:0;" onclick="addMemberEmailField()">+ Add another</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="onboardingBtn" style="margin-top:6px;">
+          <span class="spinner"></span><span class="btn-label">Finish setup</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="config.js?v=20260706"></script>
+<script src="auth.js?v=20260706"></script>
+<script>
+  requireAuth();
+  document.getElementById("onboardingForm").addEventListener("submit", handleOnboardingSubmit);
+  document.querySelectorAll('input[name="role"]').forEach(radio => {
+    radio.addEventListener("change", (e) => {
+      document.getElementById("teamFieldsBlock").style.display =
+        e.target.value === "Captain" ? "block" : "none";
+    });
+  });
+  loadSportsIntoOnboardingForm();
+</script>
+</body>
+</html>

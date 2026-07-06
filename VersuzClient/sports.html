@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versuz — Sports</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand"><span class="split"></span> VERSUZ</div>
+    <nav class="nav-group">
+      <div class="nav-label">Overview</div>
+      <a class="nav-link" href="dashboard.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-link" href="matches.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l7 7-7 7M20 4l-7 7 7 7"/></svg>
+        Matches
+      </a>
+      <a class="nav-link" href="teams.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5M14 15c3 0 6.5 1.6 7 5"/></svg>
+        Teams
+      </a>
+      <a class="nav-link active" href="sports.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>
+        Sports
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Account</div>
+      <a class="nav-link" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9c.4.4.9.7 1.5.8h.2a2 2 0 110 4h-.2a1.7 1.7 0 00-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="avatar-ring">MA</div>
+      <div><div class="who">Muhammad Aizaz</div><div class="role">Guest</div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <p class="eyebrow">DISCIPLINES</p>
+        <h1>Sports</h1>
+      </div>
+      <div class="flex gap-12" style="flex-wrap:wrap;">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="sportsSearch" placeholder="Search sports...">
+        </div>
+      </div>
+    </div>
+
+    <div id="sportsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 32px;">
+    </div>
+  </main>
+
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script>
+  const sportEmojis = {
+      'Basketball': '🏀',
+      'Futsal': '⚽',
+      'Badminton': '🏸',
+      'Cricket': '🏏'
+  };
+
+  const getBackendUrl = () => {
+      const currentHost = window.location.hostname;
+      if (currentHost.includes('github.dev')) {
+          return `https://${currentHost.replace('-5500', '-5000')}/api/v1/sports`;
+      }
+      return 'http://localhost:5000/api/v1/sports';
+  };
+
+  async function fetchAndRenderSports() {
+      const sportsGrid = document.getElementById('sportsGrid');
+      if (!sportsGrid) return;
+
+      try {
+          const targetUrl = getBackendUrl();
+          console.log("Routing Request Path to Backend:", targetUrl);
+
+          const response = await fetch(targetUrl);
+          const resData = await response.json();
+
+          if (resData.status !== 'success' || !Array.isArray(resData.data)) {
+              sportsGrid.innerHTML = `<p style="color:var(--text-mute); padding: 10px;">Failed to gather valid sports configuration structures.</p>`;
+              return;
+          }
+
+          // Build dynamic templates loop
+          let sportsHTML = resData.data.map(sport => {
+              const emoji = sportEmojis[sport.icon_type] || '🏆';
+              const statusClass = (sport.status && sport.status.toLowerCase() === 'active') ? 'active' : 'open';
+              
+              // Updated to use system native UI layout classes: 'vs-card' and 'vs-status standard'
+              return `
+                <div class="vs-card" style="flex-direction: column; align-items: stretch; gap: 16px; padding: 24px;">
+                  <div style="display:flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h2 style="font-size: 20px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px;">
+                      <span>${emoji}</span><span>${sport.sport_name}</span>
+                    </h2>
+                    <span class="vs-status standard ${statusClass}" style="text-transform: uppercase; font-size: 11px; font-weight:600; padding: 4px 8px; border-radius: 20px;">${sport.status}</span>
+                  </div>
+                  
+                  <p style="color: var(--text-mute); font-size: 14px; line-height: 1.5; margin: 0; min-height: 42px;">${sport.description || 'No summary description mapped.'}</p>
+                  
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-top: 1px solid var(--border); padding-top: 16px; width: 100%;">
+                    <div>
+                      <div style="font-size: 10px; font-weight:600; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.05em;">Teams</div>
+                      <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">${sport.total_teams}</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 10px; font-weight:600; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.05em;">Live</div>
+                      <div style="font-size: 20px; font-weight: 700; margin-top: 4px; color: ${sport.live_matches > 0 ? '#EF4444' : 'inherit'}">${sport.live_matches}</div>
+                    </div>
+                    <div>
+                      <div style="font-size: 10px; font-weight:600; color: var(--text-mute); text-transform: uppercase; letter-spacing: 0.05em;">This Week</div>
+                      <div style="font-size: 20px; font-weight: 700; margin-top: 4px;">${sport.matches_this_week}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+          }).join('');
+
+          // Action placeholder card matching system design styles
+          sportsHTML += `
+            <div class="vs-card placeholder" style="border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px; cursor: pointer; color: var(--text-mute); background: transparent;">
+              <span style="font-size: 28px; margin-bottom: 8px;">+</span>
+              <span style="font-weight: 600; font-size: 14px;">Add a sport</span>
+            </div>
+          `;
+
+          sportsGrid.innerHTML = sportsHTML;
+
+      } catch (error) {
+          console.error("Layout engine catch failure block:", error);
+          sportsGrid.innerHTML = `
+            <p style="color:var(--text-mute); padding: 10px; line-height: 1.6;">
+              Unable to establish a link connection with the database backend router.<br>
+              <small style="color: #EF4444;">Error: Check that your Node database server container is up and active.</small>
+            </p>
+          `;
+      }
+  }
+
+  document.getElementById('sportsSearch')?.addEventListener('input', (e) => {
+      const targetText = e.target.value.toLowerCase();
+      document.querySelectorAll('#sportsGrid > div:not(.placeholder)').forEach(card => {
+          const cardTitle = card.querySelector('h2')?.innerText.toLowerCase() || '';
+          card.style.display = cardTitle.includes(targetText) ? 'flex' : 'none';
+      });
+  });
+
+  document.addEventListener('DOMContentLoaded', fetchAndRenderSports);
+</script>
+</body>
+</html>

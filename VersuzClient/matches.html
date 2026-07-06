@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Versuz — Matches</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand"><span class="split"></span> VERSUZ</div>
+    <nav class="nav-group">
+      <div class="nav-label">Overview</div>
+      <a class="nav-link" href="dashboard.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-link active" href="matches.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l7 7-7 7M20 4l-7 7 7 7"/></svg>
+        Matches
+      </a>
+      <a class="nav-link" href="teams.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3 2.5-5 6-5s6 2 6 5M14 15c3 0 6.5 1.6 7 5"/></svg>
+        Teams
+      </a>
+      <a class="nav-link" href="sports.html">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>
+        Sports
+      </a>
+    </nav>
+    <nav class="nav-group">
+      <div class="nav-label">Account</div>
+      <a class="nav-link" href="#">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.2a1.7 1.7 0 00-1-1.5 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.2a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.2a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9c.4.4.9.7 1.5.8h.2a2 2 0 110 4h-.2a1.7 1.7 0 00-1.5 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="avatar-ring">MA</div>
+      <div><div class="who">Muhammad Aizaz</div><div class="role">Guest</div></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <p class="eyebrow">FIXTURES &amp; RESULTS</p>
+        <h1>Matches</h1>
+      </div>
+      <div class="flex gap-12" style="flex-wrap:wrap;">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search matches..." id="matchSearch">
+        </div>
+        <button class="btn btn-primary">+ Schedule Match</button>
+      </div>
+    </div>
+
+    <div class="flex gap-8 mt-8" style="margin-bottom:24px;flex-wrap:wrap;" id="filterTabs">
+      <button class="btn btn-sm btn-ghost active-tab" data-filter="all">All</button>
+      <button class="btn btn-sm btn-ghost" data-filter="live">Live</button>
+      <button class="btn btn-sm btn-ghost" data-filter="upcoming">Upcoming</button>
+      <button class="btn btn-sm btn-ghost" data-filter="completed">Completed</button>
+    </div>
+
+    <div id="liveSection">
+      <div class="section-head"><h3>Live</h3></div>
+      <div class="flex" id="liveContainer" style="flex-direction:column;gap:14px;margin-bottom:34px;"></div>
+    </div>
+
+    <div id="upcomingSection">
+      <div class="section-head"><h3>Upcoming</h3></div>
+      <div class="flex" id="upcomingContainer" style="flex-direction:column;gap:14px;margin-bottom:34px;"></div>
+    </div>
+
+    <div id="completedSection">
+      <div class="section-head"><h3>Completed</h3></div>
+      <div class="flex" id="completedContainer" style="flex-direction:column;gap:14px;"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="config.js"></script>
+<script src="auth.js"></script>
+<script>
+  requireAuth();
+  renderCurrentUser();
+
+  // Helper formatting utilities
+  const getInitials = (name) => name ? name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'VS';
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+
+    const date = new Date(dateStr);
+
+    if (isNaN(date.getTime())) return '-';
+
+    return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+    });
+};
+  const formatTime = (timeStr) => {
+      if (!timeStr) return '';
+      const parts = timeStr.split(':');
+      const hours = parseInt(parts[0]);
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const displayHours = hours % 12 || 12;
+      return `${displayHours}:${parts[1]} ${ampm}`;
+  };
+
+const getBackendUrl = () => {
+      const currentHost = window.location.hostname;
+      if (currentHost.includes('github.dev')) {
+          // 💡 Explicitly routing directly to the API version 1 endpoint layer
+          return `https://${currentHost.replace('-5500', '-5000')}/api/v1/matches`;
+      }
+      return 'http://localhost:5000/api/v1/matches';
+  };
+
+  // Live Fetching & UI Generation logic
+  async function fetchAndRenderMatches() {
+      try {
+          const targetUrl = getBackendUrl();
+          const response = await fetch(targetUrl);
+          const resData = await response.json();
+          
+          if (resData.status !== 'success') return;
+          const { live, upcoming, completed } = resData.data;
+
+          // 1. Render Live Block
+          const liveContainer = document.getElementById('liveContainer');
+          liveContainer.innerHTML = live.length ? live.map(match => `
+              <div class="vs-card">
+                <div class="vs-side">
+                  <div class="vs-badge">${getInitials(match.team_a_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_a_name}</div>
+                    <div class="meta">${match.sport_name} · ${match.location || 'Court'}</div>
+                  </div>
+                </div>
+                <div class="vs-center">
+                  <span class="vs-status live">Live · ${match.current_period || 'In Progress'}</span>
+                  <div class="vs-score">${match.team_a_score} <span style="color:var(--text-mute);">–</span> ${match.team_b_score}</div>
+                </div>
+                <div class="vs-side right">
+                  <div class="vs-badge">${getInitials(match.team_b_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_b_name}</div>
+                    <div class="meta">${match.sport_name} · ${match.location || 'Court'}</div>
+                  </div>
+                </div>
+              </div>
+          `).join('') : '<p style="color: var(--text-mute); font-size:14px; padding-left:4px;">No active live matches right now.</p>';
+
+          // 2. Render Upcoming Block
+          const upcomingContainer = document.getElementById('upcomingContainer');
+          upcomingContainer.innerHTML = upcoming.length ? upcoming.map(match => `
+              <div class="vs-card">
+                <div class="vs-side">
+                  <div class="vs-badge">${getInitials(match.team_a_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_a_name}</div>
+                    <div class="meta">${formatDate(match.match_date)} · ${formatTime(match.match_time)}</div>
+                  </div>
+                </div>
+                <div class="vs-center">
+                  <span class="vs-status upcoming">Upcoming</span>
+                  <div class="vs-mark">VS</div>
+                </div>
+                <div class="vs-side right">
+                  <div class="vs-badge">${getInitials(match.team_b_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_b_name}</div>
+                    <div class="meta">${match.location || 'Central Court'}</div>
+                  </div>
+                </div>
+              </div>
+          `).join('') : '<p style="color: var(--text-mute); font-size:14px; padding-left:4px;">No upcoming fixtures.</p>';
+
+          // 3. Render Completed Block
+          const completedContainer = document.getElementById('completedContainer');
+          completedContainer.innerHTML = completed.length ? completed.map(match => {
+              const teamAWon = match.team_a_score > match.team_b_score;
+              return `
+              <div class="vs-card">
+                <div class="vs-side">
+                  <div class="vs-badge">${getInitials(match.team_a_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_a_name}</div>
+                    <div class="meta" style="color: ${teamAWon ? '#10B981' : '#EF4444'}">${teamAWon ? 'WON' : 'LOST'}</div>
+                  </div>
+                </div>
+                <div class="vs-center">
+                  <span class="vs-status final">Final</span>
+                  <div class="vs-score">${match.team_a_score} <span style="color:var(--text-mute);">–</span> ${match.team_b_score}</div>
+                </div>
+                <div class="vs-side right">
+                  <div class="vs-badge">${getInitials(match.team_b_name)}</div>
+                  <div class="vs-team">
+                    <div class="name">${match.team_b_name}</div>
+                    <div class="meta" style="color: ${!teamAWon ? '#10B981' : '#EF4444'}">${!teamAWon ? 'WON' : 'LOST'}</div>
+                  </div>
+                </div>
+              </div>
+          `}).join('') : '<p style="color: var(--text-mute); font-size:14px; padding-left:4px;">No match history logged yet.</p>';
+
+      } catch (err) {
+          console.error("Error populating matches dashboard:", err);
+      }
+  }
+
+  // Interactivity for Tab Filters
+  document.getElementById('filterTabs').addEventListener('click', (e) => {
+      const tab = e.target.closest('[data-filter]');
+      if (!tab) return;
+
+      document.querySelectorAll('#filterTabs button').forEach(b => {
+          b.classList.remove('active-tab');
+          b.style.borderColor = '';
+          b.style.color = '';
+      });
+      
+      tab.classList.add('active-tab');
+      tab.style.borderColor = 'var(--blue)';
+      tab.style.color = 'var(--blue)';
+
+      const filter = tab.dataset.filter;
+      document.getElementById('liveSection').style.display = (filter === 'all' || filter === 'live') ? 'block' : 'none';
+      document.getElementById('upcomingSection').style.display = (filter === 'all' || filter === 'upcoming') ? 'block' : 'none';
+      document.getElementById('completedSection').style.display = (filter === 'all' || filter === 'completed') ? 'block' : 'none';
+  });
+
+  // Client-side Instant Search Field Filter
+  document.getElementById('matchSearch').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.vs-card').forEach(card => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+  });
+
+  // Execute on initial paint
+  document.addEventListener('DOMContentLoaded', fetchAndRenderMatches);
+</script>
+</body>
+</html>
