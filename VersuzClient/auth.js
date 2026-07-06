@@ -860,3 +860,4 @@ document.addEventListener("DOMContentLoaded", () => {
     createTeamForm.addEventListener("submit", handleCreateTeamSubmit);
   }
 });
+

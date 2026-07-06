@@ -67,7 +67,34 @@
       <div class="grid-3" id="teamsGrid">
         <p style="color:var(--text-mute);font-size:.85rem;">Loading teams...</p>
       </div>
+
+      
+
+      <!-- Find a Match -->
+      <div class="section-head" style="margin-top:32px;">
+        <h3>Find a Match</h3>
+      </div>
+      <div class="alert" id="matchmakingAlert"></div>
+      <div class="card card-tight" id="matchmakingPoolList">
+        <p style="color:var(--text-mute);font-size:.85rem;padding:12px;">Loading available teams...</p>
+      </div>
+
+      <!-- Challenges inbox -->
+      <div class="section-head" style="margin-top:32px;">
+        <h3>Incoming Challenges</h3>
+      </div>
+      <div class="card card-tight" id="incomingChallengesList">
+        <p style="color:var(--text-mute);font-size:.85rem;padding:12px;">Loading challenges...</p>
+      </div>
+
+      <div class="section-head" style="margin-top:24px;">
+        <h3>Outgoing Challenges</h3>
+      </div>
+      <div class="card card-tight" id="outgoingChallengesList">
+        <p style="color:var(--text-mute);font-size:.85rem;padding:12px;">Loading challenges...</p>
+      </div>
     </div>
+
 
     <!-- Roster detail view -->
     <div id="rosterView" style="display:none;">
@@ -76,7 +103,11 @@
           <p class="eyebrow" id="rosterSportLabel">TEAM</p>
           <h1 id="rosterTeamName">Loading...</h1>
         </div>
-        <div class="flex gap-12" style="flex-wrap:wrap;">
+        <div class="flex gap-12" style="flex-wrap:wrap;align-items:center;">
+          <label id="matchmakingToggleWrap" style="display:none;align-items:center;gap:8px;font-size:.85rem;color:var(--text-mute);cursor:pointer;">
+            <input type="checkbox" id="matchmakingToggle">
+            Looking for a Match
+          </label>
           <button class="btn btn-ghost btn-sm" id="leaveTeamBtn" style="display:none;border-color:var(--line);">Leave Team</button>
           <button class="btn btn-rival btn-sm" id="deleteTeamBtn" style="display:none;">Delete Team</button>
           <button class="btn btn-ghost" onclick="window.location.href='teams.html'">← Back to Teams</button>
@@ -147,8 +178,46 @@
   </div>
 </div>
 
+<!-- Challenge modal -->
+<div class="modal-backdrop" id="challengeModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeChallengeModal()" aria-label="Close">✕</button>
+    <h3 style="text-transform:none;font-size:1.3rem;margin-bottom:8px;">
+      Challenge <span id="challengeOpponentName">this team</span>
+    </h3>
+    <p style="font-size:.85rem;margin-bottom:20px;">Propose a date, time, and venue to play.</p>
+
+    <div class="alert" id="challengeAlert"></div>
+
+    <form id="challengeForm" onsubmit="handleSendChallenge(event)">
+      <div class="field">
+        <label for="challengeSenderTeam">Challenging from</label>
+        <select id="challengeSenderTeam" required>
+          <option value="">Select one of your teams</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="challengeDate">Date</label>
+        <input type="date" id="challengeDate" required>
+      </div>
+      <div class="field">
+        <label for="challengeTime">Time</label>
+        <input type="time" id="challengeTime" required>
+      </div>
+      <div class="field">
+        <label for="challengeVenue">Venue</label>
+        <input type="text" id="challengeVenue" placeholder="Downtown Sports Complex, Court 2" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="challengeSendBtn">
+        <span class="spinner"></span><span class="btn-label">Send Challenge</span>
+      </button>
+    </form>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script src="auth.js"></script>
+<script src="matchmaking.js"></script>
 <script>
   requireAuth();
   renderCurrentUser();
@@ -160,9 +229,32 @@
     document.getElementById("teamsListView").style.display = "none";
     document.getElementById("rosterView").style.display = "block";
     loadTeamRoster(teamId);
+    initRosterMatchmakingToggle(teamId);
   } else {
     loadMyTeams();
+    loadMatchmakingPool();
+    loadPendingChallenges();
   }
+
+
+  const role = localStorage.getItem("user_role");
+
+if (teamId) {
+  document.getElementById("teamsListView").style.display = "none";
+  document.getElementById("rosterView").style.display = "block";
+  loadTeamRoster(teamId);
+} else {
+  loadMyTeams();
+
+  // ✅ Only captains see matchmaking
+  if (role === "Captain") {
+    document.getElementById("matchmakingBlock").style.display = "block";
+    initMatchmaking();
+  }
+}
+
+
+
 </script>
 </body>
 </html>

@@ -15,5 +15,14 @@ const API_ENDPOINTS = {
   removeTeamMember: `${API_URL}/teams/remove-member`,
   deleteTeam: (id) => `${API_URL}/teams/${id}`,
   leaveTeam: (id) => `${API_URL}/teams/${id}/leave`,
-  matches: `${API_URL}/matches`
+  matches: `${API_URL}/matches`,
+  matchmakingPool: (sportId) => `${API_URL}/matches/pool${sportId ? `?sport_id=${sportId}` : ''}`,
+  toggleMatchmaking: `${API_URL}/matches/pool/toggle`,
+  sendChallenge: `${API_URL}/matches/challenge`,
+  pendingChallenges: `${API_URL}/matches/challenge/pending`,
+  respondChallenge: `${API_URL}/matches/challenge/respond`,
+  allTeams: `${API_URL}/teams/all`,
+  joinRequest: `${API_URL}/teams/join-request`,
+  joinRequests: `${API_URL}/teams/join-requests`,
+  respondJoinRequest: `${API_URL}/teams/join-request/respond`,
 };
